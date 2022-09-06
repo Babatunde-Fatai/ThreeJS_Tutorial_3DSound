@@ -403,7 +403,7 @@ class FirstPersonCameraDemo {
   initialize_() {
     this.initializeRenderer_();
     this.initializeScene_();
-    this.initializePostFX_();
+    // this.initializePostFX_();
     this.initializeAudio_();
 
     this.previousRAF_ = null;
@@ -534,7 +534,7 @@ class FirstPersonCameraDemo {
     wall1.position.set(0, -40, -50);
     wall1.castShadow = true;
     wall1.receiveShadow = true;
-    this.scene_.add(wall1);
+    // this.scene_.add(wall1);
 
     const wall2 = new THREE.Mesh(
       new THREE.BoxGeometry(100, 100, 4),
@@ -542,7 +542,7 @@ class FirstPersonCameraDemo {
     wall2.position.set(0, -40, 50);
     wall2.castShadow = true;
     wall2.receiveShadow = true;
-    this.scene_.add(wall2);
+    // this.scene_.add(wall2);
 
     const wall3 = new THREE.Mesh(
       new THREE.BoxGeometry(4, 100, 100),
@@ -550,7 +550,7 @@ class FirstPersonCameraDemo {
     wall3.position.set(50, -40, 0);
     wall3.castShadow = true;
     wall3.receiveShadow = true;
-    this.scene_.add(wall3);
+    // this.scene_.add(wall3);
 
     const wall4 = new THREE.Mesh(
       new THREE.BoxGeometry(4, 100, 100),
@@ -558,7 +558,7 @@ class FirstPersonCameraDemo {
     wall4.position.set(-50, -40, 0);
     wall4.castShadow = true;
     wall4.receiveShadow = true;
-    this.scene_.add(wall4);
+    // this.scene_.add(wall4);
 
     const speaker1Material = this.loadMaterial_('worn_metal4_', 1);
     const speaker1 = new THREE.Mesh(
@@ -567,7 +567,7 @@ class FirstPersonCameraDemo {
     speaker1.position.set(-40, 4, 0);
     speaker1.castShadow = true;
     speaker1.receiveShadow = true;
-    this.scene_.add(speaker1);
+    // this.scene_.add(speaker1);
 
     const speaker1Geo = new THREE.BoxGeometry(0.25, 0.25, 0.25);
     const speaker1BoxMaterial = this.loadMaterial_('broken_down_concrete2_', 1);
@@ -802,44 +802,44 @@ class FirstPersonCameraDemo {
 
     this.fpsCamera_.update(timeElapsedS);
 
-    if (this.analyzer1_) {
-      this.indexTimer_ += timeElapsedS * 0.1;
+    // if (this.analyzer1_) {
+    //   this.indexTimer_ += timeElapsedS * 0.1;
 
-      this.analyzer1Data_.push([...this.analyzer1_.getFrequencyData()]);
-      const rows = this.speakerMeshes1_.length;
-      if (this.analyzer1Data_.length > rows) {
-        this.analyzer1Data_.shift();
-      }
+    //   this.analyzer1Data_.push([...this.analyzer1_.getFrequencyData()]);
+    //   const rows = this.speakerMeshes1_.length;
+    //   if (this.analyzer1Data_.length > rows) {
+    //     this.analyzer1Data_.shift();
+    //   }
 
-      const colourSpline = new LinearSpline((t, a, b) => {
-        const c = a.clone();
-        return c.lerp(b, t);
-      });
-      colourSpline.AddPoint(0.0, new THREE.Color(0x4040FF));
-      colourSpline.AddPoint(0.25, new THREE.Color(0xFF4040));
-      colourSpline.AddPoint(1.0, new THREE.Color(0xFFFF80));
+    //   const colourSpline = new LinearSpline((t, a, b) => {
+    //     const c = a.clone();
+    //     return c.lerp(b, t);
+    //   });
+    //   colourSpline.AddPoint(0.0, new THREE.Color(0x4040FF));
+    //   colourSpline.AddPoint(0.25, new THREE.Color(0xFF4040));
+    //   colourSpline.AddPoint(1.0, new THREE.Color(0xFFFF80));
 
-      const remap = [15, 13, 11, 9, 7, 5, 3, 1, 0, 2, 4, 6, 8, 10, 12, 14];
-      for (let r = 0; r < this.analyzer1Data_.length; ++r) {
-        const data = this.analyzer1Data_[r];
-        const speakerRow = this.speakerMeshes1_[r];
-        for (let i = 0; i < data.length; ++i) {
-          const freqScale = math.smootherstep((data[remap[i]]/255) ** 0.5, 0, 1);
-          const sc = 1 + 6 * freqScale + this.noise1_.Get(this.indexTimer_, r * 0.42142, i * 0.3455);
-          speakerRow[i].scale.set(sc, 1, 1);
-          speakerRow[i].material.color.copy(colourSpline.Get(freqScale));
-          speakerRow[i].material.emissive.copy(colourSpline.Get(freqScale));
-          speakerRow[i].material.emissive.multiplyScalar(freqScale ** 2);
-        }  
-      }
-    }
+    //   const remap = [15, 13, 11, 9, 7, 5, 3, 1, 0, 2, 4, 6, 8, 10, 12, 14];
+    //   for (let r = 0; r < this.analyzer1Data_.length; ++r) {
+    //     const data = this.analyzer1Data_[r];
+    //     const speakerRow = this.speakerMeshes1_[r];
+    //     for (let i = 0; i < data.length; ++i) {
+    //       const freqScale = math.smootherstep((data[remap[i]]/255) ** 0.5, 0, 1);
+    //       const sc = 1 + 6 * freqScale + this.noise1_.Get(this.indexTimer_, r * 0.42142, i * 0.3455);
+    //       speakerRow[i].scale.set(sc, 1, 1);
+    //       speakerRow[i].material.color.copy(colourSpline.Get(freqScale));
+    //       speakerRow[i].material.emissive.copy(colourSpline.Get(freqScale));
+    //       speakerRow[i].material.emissive.multiplyScalar(freqScale ** 2);
+    //     }  
+    //   }
+    // }
 
-    if (this.analyzer2_ && this.speaker2Material_ && this.speaker2Material_.userData.shader) {
-      this.analyzer2_.getFrequencyData();
-      this.speaker2Material_.userData.shader.uniforms.audioDataTexture.value = this.analyzer2Texture_;
-      this.speaker2Material_.userData.shader.uniforms.iTime.value += timeElapsedS;
-      this.speaker2Material_.userData.shader.uniforms.audioDataTexture.value.needsUpdate = true;
-    }
+    // if (this.analyzer2_ && this.speaker2Material_ && this.speaker2Material_.userData.shader) {
+    //   this.analyzer2_.getFrequencyData();
+    //   this.speaker2Material_.userData.shader.uniforms.audioDataTexture.value = this.analyzer2Texture_;
+    //   this.speaker2Material_.userData.shader.uniforms.iTime.value += timeElapsedS;
+    //   this.speaker2Material_.userData.shader.uniforms.audioDataTexture.value.needsUpdate = true;
+    // }
   }
 }
 
